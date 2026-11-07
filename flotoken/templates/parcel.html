@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Parcel counter{% endblock %}
+{% block bodyclass %}dark{% endblock %}
+{% block themecolor %}#0B130E{% endblock %}
+{% block content %}
+<div class="page-h">
+  <div><h1>Parcel counter</h1><p id="summary" class="num">Loading…</p></div>
+  <div class="row wrap">
+    <button class="btn sm" id="soldout">Sold-out items</button>
+    <button class="btn sm" id="sound" aria-pressed="true">Sound on</button>
+  </div>
+</div>
+<div class="seg mb" id="filters" role="tablist" aria-label="Filter orders"></div>
+<div id="list" class="cards"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/parcel.js') }}?v={{ ASSET_V }}"></script>
+{% endblock %}

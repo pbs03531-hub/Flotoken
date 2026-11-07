@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Restaurant login{% endblock %}
+{% block header %}{% endblock %}
+{% block mainclass %}auth-wrap{% endblock %}
+{% block content %}
+<div class="auth-card stack">
+  <div class="row"><span class="brand"><i>F</i></span><div><h1>Restaurant login</h1><p class="muted small">Owners and staff</p></div></div>
+  <form class="card stack" id="form" autocomplete="on">
+    <label class="field">Your restaurant<select id="r" required><option value="">Loading…</option></select></label>
+    <label class="field">Username<input type="text" id="u" autocomplete="username" autocapitalize="none" required></label>
+    <label class="field">Password<input type="password" id="p" autocomplete="current-password" required></label>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn primary block" id="go">Sign in</button>
+  </form>
+  <p class="muted small center">Forgot your username or password? Ask the Flotoken team to reset it for your restaurant.<br><a href="/">Back</a> · <a href="/customer">I am a customer</a></p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const PREFILL = {{ prefill|tojson }};
+(async () => {
+  try {
+    const { restaurants } = await api('/api/public/restaurants');
+    $('#r').innerHTML = '<option value="">Choose your restaurant</option>' + restaurants.map((x) => `<option value="${esc(x.slug)}">${esc(x.name)}</option>`).join('');
+    if (PREFILL) $('#r').value = PREFILL;
+    if (!restaurants.length) $('#err').textContent = 'No restaurants yet. The Flotoken team adds them.';
+  } catch (e) { $('#err').textContent = e.message; }
+})();
+$('#form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const slug = $('#r').value; $('#err').textContent = '';
+  if (!slug) { $('#err').textContent = 'Please choose your restaurant'; return; }
+  $('#go').disabled = true;
+  try {
+    const r = await api('/r/' + slug + '/api/auth/login', 'POST', { username: $('#u').value, password: $('#p').value });
+    location.href = r.home;
+  } catch (err) { $('#err').textContent = err.message; $('#go').disabled = false; }
+});
+</script>
+{% endblock %}
