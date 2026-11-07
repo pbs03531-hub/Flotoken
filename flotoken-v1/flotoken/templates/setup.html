@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Set up{% endblock %}
+{% block header %}{% endblock %}
+{% block mainclass %}auth-wrap{% endblock %}
+{% block content %}
+<div class="auth-card stack">
+  <div class="row"><span class="brand"><i>F</i></span><div><h1>Welcome to Flotoken</h1><p class="muted small">Create your restaurant and the owner account. This takes one minute.</p></div></div>
+  <form class="card stack" id="form">
+    <label class="field">Restaurant name<input type="text" id="name" maxlength="60" placeholder="e.g. Betty Military Hotel" required autofocus></label>
+    <label class="field">Owner username<input type="text" id="u" maxlength="30" autocomplete="username" autocapitalize="none" required></label>
+    <label class="field">Password (at least 6 characters)<input type="password" id="p" autocomplete="new-password" minlength="6" required></label>
+    <label class="check"><input type="checkbox" id="sample" checked> Add a sample menu (you can edit or delete it later)</label>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn primary block" id="go">Create restaurant</button>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('#err').textContent = ''; $('#go').disabled = true;
+  try {
+    const r = await api('/api/auth/setup', 'POST', { restaurant_name: $('#name').value, username: $('#u').value, password: $('#p').value, sample_menu: $('#sample').checked });
+    location.href = r.home;
+  } catch (err) { $('#err').textContent = err.message; $('#go').disabled = false; }
+});
+</script>
+{% endblock %}
