@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Counter{% endblock %}
+{% block mainclass %}has-cartbar{% endblock %}
+{% block content %}
+<div class="page-h">
+  <div><h1>Billing counter</h1><p id="summary" class="num">Loading…</p></div>
+  <div class="row wrap"><button class="btn sm" id="sold" aria-pressed="false">Sold-out mode</button></div>
+</div>
+<div id="last" class="card flat mb" hidden></div>
+<div class="pos">
+  <section>
+    <div class="stack">
+      <input type="search" id="q" placeholder="Search menu" autocomplete="off" aria-label="Search menu">
+      <div class="chips" id="chips" role="group" aria-label="Menu sections"></div>
+      <div class="card" id="menu"></div>
+    </div>
+  </section>
+  <aside class="cart-col"><div class="card" id="cart-desktop"></div></aside>
+</div>
+<div class="cartbar" id="cartbar" hidden><button class="btn primary block" id="viewcart"></button></div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="{{ url_for('static', filename='js/counter.js') }}?v={{ ASSET_V }}"></script>
+{% endblock %}

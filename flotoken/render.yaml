@@ -1,0 +1,40 @@
+# Render Blueprint for Flotoken V1 (many restaurants on one server).
+#
+# FREE plan = demo only. Free services sleep after 15 minutes and lose every file on restart, so hotels,
+# customers and orders are NOT kept. Because of that, the Flotoken owner login and the first demo hotel are
+# recreated from the settings below on every start.
+#
+# FOR REAL USE (data is kept):
+#   1. Change   plan: free   to a paid plan (render.com/pricing).
+#   2. Remove the "#" in front of the disk block and the DATA_DIR variable below.
+services:
+  - type: web
+    name: flotoken
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 8 --timeout 60 --access-logfile -
+    healthCheckPath: /healthz
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      # Your own login for the Flotoken owner dashboard (/platform). You create it here.
+      - key: PLATFORM_USERNAME
+        sync: false            # Render asks you for this when you create the service
+      - key: PLATFORM_PASSWORD
+        sync: false            # ...and this (at least 6 characters). Change it here and redeploy if you ever forget it.
+      # Optional: also create one demo restaurant at start-up (only if there are none yet).
+      - key: RESTAURANT_NAME
+        value: Demo Hotel
+      - key: OWNER_USERNAME
+        value: demo
+      - key: OWNER_PASSWORD
+        value: demo1234
+      - key: SAMPLE_MENU
+        value: "1"
+      # - key: DATA_DIR
+      #   value: /var/data
+    # disk:
+    #   name: flotoken-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
