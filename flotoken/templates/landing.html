@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block header %}{% endblock %}
+{% block mainclass %}auth-wrap{% endblock %}
+{% block content %}
+<div class="auth-card stack landing">
+  <div class="center"><span class="brand big"><i>F</i></span><h1>Flotoken</h1><p class="muted">Takeaway tokens for restaurants. Nobody waits twice for one parcel.</p></div>
+  <a class="choice" href="/staff" id="go-staff"><b>Restaurant login</b><span>For restaurant owners and staff: counter, kitchen and admin.</span></a>
+  <a class="choice alt" href="/customer" id="go-customer"><b>I am a customer</b><span>Sign up or log in, pick a restaurant, order and track your token.</span></a>
+  <button class="btn block" data-install hidden>Install Flotoken on this phone</button>
+  <p class="muted small center"><a href="/pricing">Pricing</a> · <a href="/platform">Flotoken team</a></p>
+</div>
+{% endblock %}
+{% block scripts %}<script>if (typeof paintInstall === 'function') paintInstall();</script>{% endblock %}
